@@ -1,0 +1,55 @@
+{%extends "base.html"%}
+{%load crispy_forms_tags%}
+{%block content%}
+
+  <div class="modal fade" id="addItemModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Add Item for tracking</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form action="" method="POST" autocomplete="off">
+            {% csrf_token%}
+            {{form | crispy}}
+            <button type="submit" class="btn btn-primary mt-2">Save</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class = "col">
+        <button class="btn btn outline-primary" data-bs-toggle="modal" data-bs-target="#addItemModal">Add</button>
+         <button class="btn btn-info">Update</button>
+    </div>
+    <div class="col" style="text-align:right">
+      <div>Total number of itmes being tracked: {{item_no}}</div>
+      <div>Discounted items: {{no_discounted}}</div>
+    </div>
+    
+  </div>
+  {%if qs%}
+    {%for item in qs%}
+      <div class="card mt-3" >
+        <div class="card-header">
+          <h5>{{item.name}}</h5>
+          <a href="{% url 'delete' item.pk%}"><button class="btn btn-danger">Delete?</button></a>
+        </div>
+        <div class="card-body">
+          <div class="blackqoute">
+            <div> Current Price (Rs.): {{item.current_price}}</div>
+            <div>Old Price (Rs.): {{item.old_price}}</div>
+            <div>Difference (Rs.): {{item.price_difference}}</div>
+            <div>Link: <a href="{{item.url}}">{{item.url}}</a></div>
+          </div>
+        </div>
+      </div>
+    {%endfor%}
+  {%else%}
+    <h5>No item in the list</h5>
+  {%endif%}
+
+{%endblock content%}
